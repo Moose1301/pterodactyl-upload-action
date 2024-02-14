@@ -20,6 +20,7 @@ async function main() {
       restart,
       targets,
       decompressTarget,
+      targetedNames
     } = settings;
 
     let fileSourcePaths = [];
@@ -36,7 +37,12 @@ async function main() {
       for (const source of fileSourcePaths) {
         core.debug(`Processing source ${source}`);
         await validateSourceFile(source);
-        const targetFile = getTargetFile(targetPath, source);
+        const targetFile = getTargetFile(
+            targetedNames.has(path.basename(source)) ?
+                targetedNames.get(path.basename(source)) :
+                  targetPath,
+            source
+        );
         const buffer = await fs.readFile(source);
 
         await uploadFile(serverId, targetFile, buffer);
@@ -90,12 +96,14 @@ async function getSettings() {
   let targetPath = getInput("target");
   let serverIdInput = getInput("server-id");
   let serverIds = getMultilineInput("server-ids");
+  let targetNames = getMultilineInput("target-names") || [];
 
   // Debug print out all the inputs
   core.debug(`restart: ${restart}`);
   core.debug(`source: ${sourcePath}`);
   core.debug(`sources: ${sourceListPath}`);
   core.debug(`target: ${targetPath}`);
+  core.debug(`target-names: ${targetNames}`);
   core.debug(`server-id: ${serverIdInput}`);
   core.debug(`server-ids: ${serverIds}`);
 
@@ -108,6 +116,12 @@ async function getSettings() {
   targetPath = targetPath || config.target || "";
   serverIdInput = serverIdInput || config.server || "";
   serverIds = serverIds.length ? serverIds : config.servers || [];
+
+  const targetedNames = new Map();
+  for (let i = 0; i < targetNames.length; i++) {
+    let splitTarget = targetNames[i].split(":");
+    targetedNames.set(splitTarget[0], splitTarget[1]);
+  }
 
   const targets = config.targets || [];
 
@@ -148,6 +162,7 @@ async function getSettings() {
     targets,
     decompressTarget,
     followSymbolicLinks,
+    targetedNames
   };
 }
 

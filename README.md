@@ -19,8 +19,9 @@ You have to create a client api key in the pterodactyl panel. You can do this in
 4. `server-ids`: IDs of the target servers (multiline).
 5. `source`: Source file to be uploaded.
 6. `sources`: Source files to be uploaded (multiline).
+6. `sources`: Source files to be uploaded (multiline).
 7. `target`: Destination of the file on the server. Can be a file name (for a single source) or a directory name ending with a slash (for multiple files).
-8. `proxy`: Proxy to be used for upload (username:password@host:port).
+8. `target-names`: Target names for uploaded files defaults to its current one.
 
 All file inputs support glob patterns.
 
@@ -47,6 +48,8 @@ jobs:
           #   sources: |
           #     hello.txt
           #     hello2.txt
+          target-names: |
+            hello.txt:hello-renamed.txt
           target: "./"
           # If you want to restart the servers after successful upload
           # restart: true
