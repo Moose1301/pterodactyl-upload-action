@@ -17,5 +17,10 @@
   },
   "devDependencies": {
     "@vercel/ncc": "^0.36.1"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "follow-redirects@1.15.5": "patches/follow-redirects@1.15.5.patch"
+    }
   }
 }

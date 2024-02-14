@@ -1,0 +1,27 @@
+diff --git a/index.js b/index.js
+index f58b933486836d97a0c0af74ee16a57a2efaebe4..ba3bbeafb212f8fe2c1f9e2db1729ec2598a11fc 100644
+--- a/index.js
++++ b/index.js
+@@ -138,16 +138,16 @@ RedirectableRequest.prototype.write = function (data, encoding, callback) {
+     return;
+   }
+   // Only write when we don't exceed the maximum body length
+-  if (this._requestBodyLength + data.length <= this._options.maxBodyLength) {
++  // if (this._requestBodyLength + data.length <= this._options.maxBodyLength) {
+     this._requestBodyLength += data.length;
+     this._requestBodyBuffers.push({ data: data, encoding: encoding });
+     this._currentRequest.write(data, encoding, callback);
+-  }
++  // }
+   // Error when we exceed the maximum body length
+-  else {
+-    this.emit("error", new MaxBodyLengthExceededError());
+-    this.abort();
+-  }
++  // else {
++  //   this.emit("error", new MaxBodyLengthExceededError());
++  //   this.abort();
++  // }
+ };
+ 
+ // Ends the current native request
